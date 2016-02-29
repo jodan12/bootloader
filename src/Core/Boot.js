@@ -39,7 +39,6 @@
                 callback.call();
             }
 
-            console.log(call);
         }.bind(this));
     };
 
