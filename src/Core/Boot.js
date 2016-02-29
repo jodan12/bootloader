@@ -1,6 +1,6 @@
 ;(function (Boot) {
 
-    Boot.loadable =  Boot.loadable instanceof Map === true ? Boot.loadable : new Map();
+    Boot.loadable =   Boot.loadable || [];
 
 
     /*
@@ -11,7 +11,7 @@
      |
      */
     Boot.load = function (condition, callback) {
-        this.loadable.set(condition, callback);
+        this.loadable.push({key:condition, callback: callback});
     };
 
     /*
@@ -22,20 +22,20 @@
      */
     Boot.start = function () {
 
-        this.loadable.forEach(function (callback, key) {
+        this.loadable.forEach(function (elem) {
 
             var call = false;
 
-            if (typeof key == 'string' && key.charAt(0) == '#') {
-                call = document.getElementById(key.substr(1));
+            if (typeof elem.key == 'string' && elem.key.charAt(0) == '#') {
+                call = document.getElementById(elem.key.substr(1));
             }
 
-            if (typeof key =='boolean') {
-                call = key;
+            if (typeof elem.key =='boolean') {
+                call = elem.key;
             }
 
             if (call) {
-                callback.call();
+                elem.callback.call();
             }
 
         });
