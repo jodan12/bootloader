@@ -22,14 +22,21 @@
     Boot.start = function () {
 
         var startables = document.querySelectorAll('[data-load]');
+        var callback = null;
 
         for (var i = 0; i < startables.length; i++) {
             if (!Boot.executable[startables[i].dataset.load]){
                 continue;
             }
 
-            Boot.executable[startables[i].dataset.load].call();
+            callback = Boot.executable[startables[i].dataset.load];
 
+
+            if (Boot.executable[startables[i].dataset.load] instanceof Array) {
+                callback = callback.pop();
+            }
+
+            callback.apply(null, Boot.executable[startables[i].dataset.load]);
         }
 
     };
