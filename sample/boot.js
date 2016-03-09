@@ -1,10 +1,9 @@
 (function () {
-    Boot.load('#sample', modules.sample);
-    Boot.load('#sample', function () {
-        console.log('2nd callback');
-    });
+    Boot.executable.test = function () {
+        console.log('1st callback');
+    };
 
-    Boot.load('#test', function () {
-        console.log('this doesn\' get executed');
-    });
+    Boot.executable.test3 = function () {
+        console.log('2nd callback');
+    };
 })();

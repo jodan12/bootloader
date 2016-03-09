@@ -1,7 +1,6 @@
 ;(function (Boot) {
 
-    Boot.loadable =   Boot.loadable || [];
-
+    Boot.executable =   Boot.executable || {};
 
     /*
      |------------------------------------------------------------
@@ -10,8 +9,8 @@
      | condition, can be id, or function
      |
      */
-    Boot.load = function (condition, callback) {
-        this.loadable.push({key:condition, callback: callback});
+    Boot.register = function (tag, callback) {
+        this.executable[tag] = callback;
     };
 
     /*
@@ -22,23 +21,17 @@
      */
     Boot.start = function () {
 
-        this.loadable.forEach(function (elem) {
+        var startables = document.querySelectorAll('[data-load]');
 
-            var call = false;
-
-            if (typeof elem.key == 'string' && elem.key.charAt(0) == '#') {
-                call = document.getElementById(elem.key.substr(1));
+        for (var i = 0; i < startables.length; i++) {
+            if (!Boot.executable[startables[i].dataset.load]){
+                continue;
             }
 
-            if (typeof elem.key =='boolean') {
-                call = elem.key;
-            }
+            Boot.executable[startables[i].dataset.load].call();
 
-            if (call) {
-                elem.callback.call();
-            }
+        }
 
-        });
     };
 
     /*
