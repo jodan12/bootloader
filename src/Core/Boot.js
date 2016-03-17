@@ -16,7 +16,7 @@
         // The last object will become the context of the callback
         if (typeof callback == 'object') {
             ctx = callback;
-            callback = callback.pop();
+            callback = exec.pop();
         }
 
         // Throw exception if the last element is not a function
@@ -36,8 +36,11 @@
      */
     Boot.start = function () {
 
-        for (var i = 0; i < startables.length; i++) {
-            execute();
+        for (var key in Boot.executable) {
+            if (!document.querySelector(key)) {
+                continue;
+            }
+            execute(Boot.executable[key]);
         }
 
     };

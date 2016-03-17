@@ -1,12 +1,18 @@
 (function () {
-    Boot.executable.test = [window.test || (window.test = {test:123}), function (sample) {
+    Boot.executable['#sample'] = [window.test || (window.test = {test:123}), function (sample) {
         console.log('1st callback');
-        console.log(sample);
-        console.log(arguments);
 
+        console.log(sample);
     }];
 
-    Boot.executable.test3 = function () {
+
+    var ctx = {
+        data: 10,
+    }
+
+    Boot.executable['#sample2'] = [function () {
         console.log('2nd callback');
-    };
+        console.log(this.data);
+    }, ctx];
+
 })();
