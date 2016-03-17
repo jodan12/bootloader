@@ -1,16 +1,31 @@
 ;(function (Boot) {
 
-    Boot.executable =   Boot.executable || {};
+    Boot.executable = Boot.executable || {};
 
-    /*
-     |------------------------------------------------------------
-     | Add to bootloader list of todos
-     |------------------------------------------------------------
-     | condition, can be id, or function
-     |
-     */
-    Boot.register = function (tag, callback) {
-        this.executable[tag] = callback;
+    var execute = function (exec) {
+
+        var callback = null;
+        var ctx = null;
+
+        // Check if the value is an array
+        if (exec instanceof Array) {
+            callback = exec.pop();
+        }
+
+        // Check if the last element of the array is an object
+        // The last object will become the context of the callback
+        if (typeof callback == 'object') {
+            ctx = callback;
+            callback = callback.pop();
+        }
+
+        // Throw exception if the last element is not a function
+        if (typeof callback != 'function') {
+            throw 'Expected function not found';
+        }
+
+        // execute and apply context
+        callback.apply(ctx, exec);
     };
 
     /*
@@ -21,22 +36,8 @@
      */
     Boot.start = function () {
 
-        var startables = document.querySelectorAll('[data-load]');
-        var callback = null;
-
         for (var i = 0; i < startables.length; i++) {
-            if (!Boot.executable[startables[i].dataset.load]){
-                continue;
-            }
-
-            callback = Boot.executable[startables[i].dataset.load];
-
-
-            if (Boot.executable[startables[i].dataset.load] instanceof Array) {
-                callback = callback.pop();
-            }
-
-            callback.apply(null, Boot.executable[startables[i].dataset.load]);
+            execute();
         }
 
     };
