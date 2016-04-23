@@ -30,7 +30,7 @@ var app.Http = new XMLHttpRequest();
 ...
 
 Boot.executable['#element_id'] = [window.app.Http, function (Http) {
-    Http.get('https://api.github.com/repos/jodan12/bootloader/commits');
+    Http.open('GET' ,'https://api.github.com/repos/jodan12/bootloader/commits');
 
     Http.onload = function () {
         console.log(JSON.parse(Http.responseText));
